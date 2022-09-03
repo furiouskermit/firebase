@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <form action="">
+      <fieldset>
+        <div class="form-box">
+          <label for="name">이름</label>
+          <input type="text" id="name" class="form-input">
+        </div>
+        <div class="form-box">
+          <label for="writing">내용</label>
+          <textarea name="" id="writing" class="form-input"></textarea>
+        </div>
+        <input type="submit" value="보내기" id="btnSubmit">
+        <button type="button" id="btnRefresh">새로고침</button>
+      </fieldset>
+    </form>
+    <ul id="test">
+    </ul>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+      import { getFirestore, collection, Timestamp, FieldValue, addDoc, setDoc, getDocs, doc, query, where, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDyjXADJCKn6se5AqfJufeDNb1l3g6GbDk",
+        authDomain: "hyewon-d56d6.firebaseapp.com",
+        projectId: "hyewon-d56d6",
+        storageBucket: "hyewon-d56d6.appspot.com",
+        messagingSenderId: "578350137923",
+        appId: "1:578350137923:web:ebd46e6e70f218d6038af6"
+      };
+    
+      // Initialize Firebase
+      const init = initializeApp(firebaseConfig);
+      const db = getFirestore(init);
+
+      const currentUl = document.querySelector("#test");
+      const formInput = document.querySelectorAll(".form-input");
+
+
+      function onChange(item) {
+        const inputVal = item.value;
+        return inputVal;
+      }
+
+      formInput.forEach(item => item.addEventListener("change", onChange));
+
+      const dataCol = collection(db, 'board');
+      const dataDoc = doc(dataCol);
+
+      //add
+      async function addData() {
+        const inputName = document.getElementById("name").value;
+        const inputText = document.getElementById("writing").value;
+        const data = {
+          name: inputName,
+          text: inputText,
+          timeStamp: Timestamp.fromDate(new Date()),
+          boolean: true
+        }
+        const setData = await addDoc(dataCol, data);
+        return setData;
+      }
+
+      /* read */
+      function addElement(item1){
+        const newLi = document.createElement("li");
+        newLi.classList.add("list-item");
+        newLi.setAttribute("data-id", item1.id);
+        newLi.innerHTML = `<strong class='doc-text'>${item1.data().text}</strong><span class='data-name'>${item1.data().name}</span>`
+        currentUl.appendChild(newLi)
+
+        
+      }
+
+      //read
+      async function getData() {
+        const order = query(dataCol, orderBy("timeStamp", "desc"))
+        const loadData = await getDocs(order);
+        loadData.forEach((item) => {
+          addElement(item)
+        })
+      }
+      getData()
+
+      //realtime
+      
+      // const q = query(dataCol, where("boolean", "==", true));
+      // const realtime = onSnapshot(q, (querySnapshot) => {
+      //   querySnapshot.forEach((doc) => {
+      //     addElement(doc)
+      //   })
+      // })
+
+      function onSubmit() {
+        event.preventDefault();
+
+        //add data
+        addData().then(() => console.log('gg'))
+
+        //데이터 db 추가 후 input값 초기화
+        formInput.forEach(item => item.value = null);
+
+        currentUl.innerHTML = null
+        getData()
+        
+      }
+
+      document.getElementById("btnSubmit").addEventListener("click", onSubmit);
+      
+    </script>
+  </body>
+</html>
