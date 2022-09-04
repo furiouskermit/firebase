@@ -1,6 +1,7 @@
 {
   "type": "module",
   "name": "javascript",
+  "main": "custom-firebase.js",
   "dependencies": {
     "firebase": "^9.9.4",
     "firebase-admin": "^11.0.1",
