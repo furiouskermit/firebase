@@ -57,7 +57,7 @@
    const newLi = document.createElement("li");
    newLi.classList.add("list-item");
    newLi.setAttribute("data-id", item1.id);
-newLi.innerHTML = `<span class='data-name'>${item1.data().name}</span><span class='data-time'>${item1.data().year}/${item1.data().month}/${item1.data().day} ${item1.data().hour}:${item1.data().min}</span><span class='data-text'><pre>${item1.data().text}</pre></span>`
+newLi.innerHTML = `<span class='data-name'>${item1.data().name}</span><span class='data-time'>${item1.data().year}/${item1.data().month}/${item1.data().day} ${item1.data().hour}:${item1.data().min}</span><span class='data-text'>${item1.data().text}</span>`
    currentUl.appendChild(newLi)
  }
 
