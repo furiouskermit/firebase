@@ -98,8 +98,10 @@ textarea {
 }
 
 #test {
+  width: 100%;
   height: calc(100% - 358px);
   padding: 30px 14px 0;
+  overflow: hidden;
   overflow-y: scroll;
 }
 .list-item {
