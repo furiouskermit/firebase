@@ -134,10 +134,14 @@ textarea {
 }
 .data-text {
   display: block;
+  width: 100%;
   margin: 20px 0 0;
   line-height: 1.4em;
   font-weight: 500;
   font-size: 20px;
+  white-space: noraml;
+  word-break: break-word;
+  overflow: hidden;
 }
 
 @media (prefer-color-scheme: dark) {
